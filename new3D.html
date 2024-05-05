@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Print Calculator</title>
+  <style>
+    /* CSS styles */
+    body {
+      display: flex;
+     
+    }
+
+    .calculator-container {
+      width: 45%;
+      margin-right: 20px;
+    }
+
+    .result-container {
+      width: 45%;
+    }
+
+    .calculator, .result {
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .calculator h2, .result h3 {
+      margin-top: 0;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    #calculation-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #calculation-table th, #calculation-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    #calculation-table th {
+      background-color: #f2f2f2;
+    }
+
+    .download-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .download-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator-container">
+    <div class="calculator">
+      <h2>3D Print Calculator</h2>
+      <div class="input-group">
+        <label for="item-name">Item Name:</label>
+        <input type="text" id="item-name">
+      </div>
+      <div class="input-group">
+        <label for="filament-weight">Filament Weight (g):</label>
+        <input type="number" id="filament-weight">
+      </div>
+      <div class="input-group">
+        <label for="printing-time">Printing Time (hours):</label>
+        <input type="number" id="printing-time">
+      </div>
+      <div class="input-group">
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" value="1">
+      </div>
+      <button onclick="calculateTotal()">Calculate Total Cost</button>
+    </div>
+  </div>
+
+  <div class="result-container">
+    <div class="result">
+      <h3>Calculation Results</h3>
+      <table id="calculation-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Filament Weight (g)</th>
+            <th>Printing Time (hours)</th>
+            <th>Quantity</th>
+            <th>Total Cost (₹)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Calculation results will be added here -->
+        </tbody>
+      </table>
+      <button class="download-button" onclick="downloadInvoice()">Print Invoice</button>
+    </div>
+    <div class="result">
+      <p>Total Cost: ₹<span id="total-cost">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    function calculateTotal() {
+      var itemName = document.getElementById("item-name").value.trim();
+      var filamentWeight = parseFloat(document.getElementById("filament-weight").value);
+      var printingTime = parseFloat(document.getElementById("printing-time").value);
+      var quantity = parseInt(document.getElementById("quantity").value);
+
+      if (itemName === "" || isNaN(filamentWeight) || isNaN(printingTime) || isNaN(quantity)) {
+        alert("Please enter valid values for Item Name, Filament Weight, Printing Time, and Quantity.");
+        return;
+      }
+
+      var totalCost = ((filamentWeight * 1.56) + (printingTime * 0.07) + 40 + (printingTime * 0.16)) * quantity;
+
+      // Create a new row for the calculation results table
+      var newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td contenteditable="true">${itemName}</td>
+        <td contenteditable="true">${filamentWeight}</td>
+        <td contenteditable="true">${printingTime}</td>
+        <td contenteditable="true">${quantity}</td>
+        <td contenteditable="false">${totalCost.toFixed(2)}</td>
+        <td><button onclick="removeRow(this)">Remove</button></td>
+      `;
+
+      // Add the new row to the table body
+      var tableBody = document.querySelector("#calculation-table tbody");
+      tableBody.appendChild(newRow);
+
+      // Automatically update the Total Cost column
+      updateTotalCost();
+    }
+
+    function removeRow(button) {
+      var row = button.closest("tr");
+      row.remove();
+      updateTotalCost();
+    }
+
+    function updateTotalCost() {
+      var totalCostColumn = document.querySelectorAll("#calculation-table tbody td:nth-child(5)");
+      var totalCostSum = 0;
+      totalCostColumn.forEach(function(element) {
+        totalCostSum += parseFloat(element.textContent);
+      });
+      document.getElementById("total-cost").textContent = totalCostSum.toFixed(2);
+    }
+
+    function downloadInvoice() {
+      window.print();
+    }
+  </script>
+</body>
+</html>
