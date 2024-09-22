@@ -7,10 +7,15 @@
   <style>
     /* CSS styles */
     body {
-      display: flex;
-     
+      display: block;
     }
 
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+      
     .calculator-container {
       width: 45%;
       margin-right: 20px;
@@ -78,53 +83,56 @@
   </style>
 </head>
 <body>
-  <div class="calculator-container">
-    <div class="calculator">
-      <h2>3D Print Calculator</h2>
-      <div class="input-group">
-        <label for="item-name">Item Name:</label>
-        <input type="text" id="item-name">
-      </div>
-      <div class="input-group">
-        <label for="filament-weight">Filament Weight (g):</label>
-        <input type="number" id="filament-weight">
-      </div>
-      <div class="input-group">
-        <label for="printing-time">Printing Time (hours):</label>
-        <input type="number" id="printing-time">
-      </div>
-      <div class="input-group">
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" value="1">
-      </div>
-      <button onclick="calculateTotal()">Calculate Total Cost</button>
+  <div class="container">
+    <div class="calculator-container">
+        <!-- This is the container for the calculator form -->
+        <div class="calculator">
+        <h2>3D Print Calculator</h2>
+        <div class="input-group">
+            <label for="item-name">Item Name:</label>
+            <input type="text" id="item-name">
+        </div>
+        <div class="input-group">
+            <label for="filament-weight">Filament Weight (g):</label>
+            <input type="number" id="filament-weight">
+        </div>
+        <div class="input-group">
+            <label for="printing-time">Printing Time (hours):</label>
+            <input type="number" id="printing-time">
+        </div>
+        <div class="input-group">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" value="1">
+        </div>
+        <button onclick="calculateTotal()">Calculate Total Cost</button>
+        </div>
     </div>
-  </div>
 
-  <div class="result-container">
-    <div class="result">
-      <h3>Calculation Results</h3>
-      <table id="calculation-table">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Filament Weight (g)</th>
-            <th>Printing Time (hours)</th>
-            <th>Quantity</th>
-            <th>Total Cost (₹)</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Calculation results will be added here -->
-        </tbody>
-      </table>
-      <button class="download-button" onclick="downloadInvoice()">Print Invoice</button>
+    <div class="result-container">
+        <div class="result">
+        <h3>Calculation Results</h3>
+        <table id="calculation-table">
+            <thead>
+            <tr>
+                <th>Item</th>
+                <th>Filament Weight (g)</th>
+                <th>Printing Time (hours)</th>
+                <th>Quantity</th>
+                <th>Total Cost (₹)</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Calculation results will be added here -->
+            </tbody>
+        </table>
+        <button class="download-button" onclick="downloadInvoice()">Print Invoice</button>
+        </div>
+        <div class="result">
+        <p>Total Cost: ₹<span id="total-cost">0</span></p>
+        </div>
     </div>
-    <div class="result">
-      <p>Total Cost: ₹<span id="total-cost">0</span></p>
-    </div>
-  </div>
+  </div>   
 <p>develop by atribot</p>
   <script>
     function calculateTotal() {
@@ -138,7 +146,7 @@
         return;
       }
 
-      var totalCost = ((filamentWeight * 5) + (printingTime * 5) + 100 + (printingTime * 5)) * quantity;
+      var totalCost = ((filamentWeight * 10) + (printingTime * 10) + 100 + (printingTime * 10)) * quantity;
 
       // Create a new row for the calculation results table
       var newRow = document.createElement("tr");
